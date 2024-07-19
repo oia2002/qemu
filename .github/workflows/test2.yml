@@ -20,11 +20,5 @@ on:
     - cron: '32 22 * * 4'
 
 jobs:
-  analyze:
-    name: Docker Image Artifact Upload
-    # You may pin to the exact commit or the version.
-    # uses: ishworkh/docker-image-artifact-upload@a50b9e168f8e28c259eb245900406427fa22213a
-    uses: ishworkh/docker-image-artifact-upload@v2.1.0
-    with:
-      # Docker image to upload
-      image: checkmarx/ast-github-action@8e887bb93dacc44e0f5b64ee2b06d5815f89d4fc
+  build_and_upload:
+    uses: ishworkh/docker-image-artifact-upload@v2.0.1
