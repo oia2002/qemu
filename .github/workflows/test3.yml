@@ -1,0 +1,40 @@
+name: Test
+
+on:
+  release:
+    types: [published]
+
+jobs:
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+        
+    - name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: checkmarx/ast-github-action:${{ github.ref_name }}
+        
+    - name: Image digest
+      run: echo ${{ steps.docker_build.outputs.digest }}
+      
+    - name: Upload Docker Image to Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./image.tar
+        asset_name: image.tar
+        asset_content_type: application/x-tar
